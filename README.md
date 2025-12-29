@@ -1,74 +1,123 @@
-# Node.js MongoDB – User Authentication & Authorization example with JWT & Mongoose
+# 🔐 Cryptography-Based Secure Authentication System
 
-## User Registration, User Login and Authorization process.
-The diagram shows flow of how we implement User Registration, User Login and Authorization process.
+## 📌 Project Overview
+This project implements a secure authentication system using
+cryptography and cybersecurity best practices. It is designed
+as a backend authentication module that can be integrated into
+larger applications.
 
-![jwt-token-authentication-node-js-example-flow](jwt-token-authentication-node-js-example-flow.png)
+The system ensures secure handling of user credentials and
+sensitive data using modern cryptographic techniques.
 
-For more detail, please visit:
-> [Node.js + MongoDB: User Authentication & Authorization with JWT](https://www.bezkoder.com/node-js-mongodb-auth-jwt/)
+---
 
-You may need to implement Refresh Token:
+## 🧠 Cryptography Concepts Implemented
 
-![jwt-refresh-token-node-js-example-flow](jwt-refresh-token-node-js-example-flow.png)
+### 1. Password Hashing (bcrypt)
+- User passwords are hashed using bcrypt with salting.
+- Plaintext passwords are never stored.
+- Even if the database is compromised, original passwords
+  cannot be recovered.
 
-> [Node.js JWT Refresh Token with MongoDB example](https://www.bezkoder.com/jwt-refresh-token-node-js-mongodb/)
+### 2. AES Encryption (Symmetric Cryptography)
+- Sensitive user data such as email is encrypted using AES.
+- Data is stored in encrypted form in MongoDB.
+- Decryption is performed only when required.
 
-Working with Front-end:
-> [Vue](https://www.bezkoder.com/jwt-vue-vuex-authentication/)
+### 3. JWT (JSON Web Tokens)
+- JWT tokens are generated after successful login.
+- Tokens are cryptographically signed using HMAC-SHA256.
+- Used for secure session management.
 
-> [Angular 8](https://www.bezkoder.com/angular-jwt-authentication/) / [Angular 10](https://www.bezkoder.com/angular-10-jwt-auth/) / [Angular 11](https://www.bezkoder.com/angular-11-jwt-auth/) / [Angular 12](https://www.bezkoder.com/angular-12-jwt-auth/) / [Angular 13](https://www.bezkoder.com/angular-13-jwt-auth/)
+---
 
-> [React](https://www.bezkoder.com/react-jwt-auth/) / [React + Redux](https://www.bezkoder.com/react-redux-jwt-auth/)
+## 🛡 Cybersecurity Features
+- Secure authentication flow
+- No plaintext password storage
+- Encrypted sensitive data
+- Token-based authorization
+- Role-based access control
 
-## More Practice:
-> [Node.js, Express & MongoDb: Build a CRUD Rest Api example](https://www.bezkoder.com/node-express-mongodb-crud-rest-api/)
+---
 
-> [Server side Pagination in Node.js with MongoDB and Mongoose](https://www.bezkoder.com/node-js-mongodb-pagination/)
+## ⚙️ Technology Stack
+- Backend: Node.js, Express.js
+- Database: MongoDB
+- Cryptography Libraries:
+  - bcryptjs
+  - crypto-js
+  - jsonwebtoken
 
-> [Node.js Express File Upload Rest API example](https://www.bezkoder.com/node-js-express-file-upload/)
+---
 
-Associations:
-> [MongoDB One-to-One relationship tutorial with Mongoose examples](https://www.bezkoder.com/mongoose-one-to-one-relationship-example/)
+## 🔄 Authentication Flow
+1. User registers
+2. Password is hashed using bcrypt
+3. Email is encrypted using AES
+4. User data is stored securely in MongoDB
+5. On login:
+   - Password is verified using bcrypt
+   - JWT token is generated
+   - Email is decrypted before sending response
 
-> [MongoDB One-to-Many Relationship tutorial with Mongoose examples](https://www.bezkoder.com/mongoose-one-to-many-relationship/)
+---
 
-> [MongoDB Many-to-Many Relationship with Mongoose examples](https://www.bezkoder.com/mongodb-many-to-many-mongoose/)
+## 🚀 API Endpoints
 
-Fullstack:
-> [Vue.js + Node.js + Express + MongoDB example](https://www.bezkoder.com/vue-node-express-mongodb-mevn-crud/)
+### Signup
+POST /api/auth/signup
 
-> [Angular 8 + Node.js + Express + MongoDB example](https://www.bezkoder.com/angular-mongodb-node-express/)
+{
+  "username": "user1",
+  "email": "user@test.com",
+  "password": "Password@123",
+  "roles": ["user"]
+}
 
-> [Angular 10 + Node.js + Express + MongoDB example](https://www.bezkoder.com/angular-10-mongodb-node-express/)
+---
 
-> [Angular 11 + Node.js + Express + MongoDB example](https://www.bezkoder.com/angular-11-mongodb-node-js-express/)
+### Login
+POST /api/auth/signin
 
-> [Angular 12 + Node.js + Express + MongoDB example](https://www.bezkoder.com/angular-12-mongodb-node-js-express/)
+{
+  "username": "user1",
+  "password": "Password@123"
+}
 
-> [Angular 13 + Node.js + Express + MongoDB example](https://www.bezkoder.com/mean-stack-crud-example-angular-13/)
+---
 
-> [Angular 14 + Node.js + Express + MongoDB example](https://www.bezkoder.com/mean-stack-crud-example-angular-14/)
+## ▶️ How to Run the Project
 
-> [Angular 15 + Node.js + Express + MongoDB example](https://www.bezkoder.com/angular-15-node-js-express-mongodb/)
-
-> [Angular 16 + Node.js + Express + MongoDB example](https://www.bezkoder.com/angular-16-node-js-express-mongodb/)
-
-> [React + Node.js + Express + MongoDB example](https://www.bezkoder.com/react-node-express-mongodb-mern-stack/)
-
-Integration on same Server/Port:
-> [Integrate Vue with Node.js Express](https://www.bezkoder.com/serve-vue-app-express/)
-
-> [Integrate Angular with Node.js Express](https://www.bezkoder.com/integrate-angular-12-node-js/)
-
-> [Integrate React with Node.js Express](https://www.bezkoder.com/integrate-react-express-same-server-port/)
-
-## Project setup
-```
+1. Install dependencies
 npm install
-```
 
-### Run
-```
-node server.js
-```
+2. Ensure MongoDB is running
+mongodb://localhost:27017
+
+3. Start the server
+npm start
+
+Server runs on port 8080.
+
+---
+
+## 👤 Individual Contribution
+This module focuses on implementing cryptography and secure
+authentication, including password hashing using bcrypt,
+AES encryption for sensitive data, and JWT-based authentication.
+
+---
+
+## 🎓 Academic Relevance
+This project demonstrates practical implementation of
+cryptography and cybersecurity concepts and is suitable
+for a 6th Semester Mini Project.
+
+---
+
+## 📌 Acknowledgement
+This project is built upon an open-source JWT authentication
+base project. The cryptography enhancements — including bcrypt
+password hashing, AES encryption for sensitive data, and
+secure JWT-based authentication — were implemented as part
+of an academic mini-project.
