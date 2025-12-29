@@ -3,13 +3,16 @@ const db = require("../models");
 const User = db.user;
 const Role = db.role;
 
+const cryptoUtil = require("../utils/crypto.util");
+
+
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
-    email: req.body.email,
+    email: cryptoUtil.encrypt(req.body.email),
     password: bcrypt.hashSync(req.body.password, 8)
   });
 
