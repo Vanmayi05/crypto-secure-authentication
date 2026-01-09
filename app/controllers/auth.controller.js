@@ -4,16 +4,23 @@ const User = db.user;
 const Role = db.role;
 
 const cryptoUtil = require("../utils/crypto.util");
-
-
+const crypto = require("crypto");
 var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
 
+/**
+ * SIGNUP
+ */
 exports.signup = (req, res) => {
+  // SHA-512 password hashing
+  const hashedPassword = crypto
+    .createHash("sha512")
+    .update(req.body.password)
+    .digest("hex");
+
   const user = new User({
     username: req.body.username,
-    email: cryptoUtil.encrypt(req.body.email),
-    password: bcrypt.hashSync(req.body.password, 8)
+    email: cryptoUtil.encrypt(req.body.email), // AES encryption
+    password: hashedPassword
   });
 
   user.save((err, user) => {
@@ -24,9 +31,7 @@ exports.signup = (req, res) => {
 
     if (req.body.roles) {
       Role.find(
-        {
-          name: { $in: req.body.roles }
-        },
+        { name: { $in: req.body.roles } },
         (err, roles) => {
           if (err) {
             res.status(500).send({ message: err });
@@ -65,10 +70,11 @@ exports.signup = (req, res) => {
   });
 };
 
+/**
+ * SIGNIN
+ */
 exports.signin = (req, res) => {
-  User.findOne({
-    username: req.body.username
-  })
+  User.findOne({ username: req.body.username })
     .populate("roles", "-__v")
     .exec((err, user) => {
       if (err) {
@@ -80,10 +86,13 @@ exports.signin = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
+      // SHA-512 password verification
+      const hashedPassword = crypto
+        .createHash("sha512")
+        .update(req.body.password)
+        .digest("hex");
+
+      const passwordIsValid = hashedPassword === user.password;
 
       if (!passwordIsValid) {
         return res.status(401).send({
@@ -92,23 +101,24 @@ exports.signin = (req, res) => {
         });
       }
 
-      const token = jwt.sign({ id: user.id },
-                              config.secret,
-                              {
-                                algorithm: 'HS256',
-                                allowInsecureKeySizes: true,
-                                expiresIn: 86400, // 24 hours
-                              });
+      const token = jwt.sign(
+        { id: user.id },
+        config.secret,
+        {
+          algorithm: "HS256",
+          expiresIn: 86400 // 24 hours
+        }
+      );
 
-      var authorities = [];
-
+      const authorities = [];
       for (let i = 0; i < user.roles.length; i++) {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
+
       res.status(200).send({
         id: user._id,
         username: user.username,
-        email: user.email,
+        email: cryptoUtil.decrypt(user.email), // AES decryption
         roles: authorities,
         accessToken: token
       });
